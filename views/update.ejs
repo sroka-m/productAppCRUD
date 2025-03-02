@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>this is a form for making updating a product</h1>
+    <form method="post" action="/products/<%=product._id%>?_method=PUT">
+      <div>
+        <label for="name">name</label>
+        <br />
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value="<%=product.name%>"
+        />
+      </div>
+      <div>
+        <label for="qty">quantity</label>
+        <br />
+        <input
+          type="number"
+          min="0"
+          max="999"
+          id="qty"
+          name="qty"
+          value="<%=product.qty%>"
+        />
+      </div>
+      <div>
+        <label for="category">choose a category</label>
+        <select name="category" id="category">
+          <% for(let category of categories){ %>
+            <option value="<%=category%>"  <%= product.category === category ? "selected" :"" %>><%=category%></option>
+            <%}%>
+        </select>
+      </div>
+      <button type="submit">submit</button>
+    </form>
+    <a href="/products/<%=product.id%>">go back to the product page</a>
+  </body>
+</html>

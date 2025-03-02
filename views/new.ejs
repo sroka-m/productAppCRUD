@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>this is a form for making a new product</h1>
+    <form method="post" action="/products">
+      <div>
+        <label for="name">name</label>
+        <br />
+        <input type="text" id="name" name="name" />
+      </div>
+      <div>
+        <label for="qty">quantity</label>
+        <br />
+        <input type="number" min="0" max="999" id="qty" name="qty" />
+      </div>
+      <div>
+        <label for="category">choose a category</label>
+        <select name="category" id="category">
+          <% for(let category of categories){ %>
+          <option value="<%=category%>"><%=category%></option>
+          <%}%>
+        </select>
+      </div>
+      <button type="submit">submit</button>
+    </form>
+    <a href="/products">go back to all products</a>
+  </body>
+</html>
