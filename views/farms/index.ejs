@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>this is the show route</h1>
+    <h2>list of farms</h2>
+    <ul>
+      <% for(let farm of farms){ %>
+      <a href="farms/<%=farm._id%>"> <li><%=farm.name%></li></a>
+      <% } %>
+    </ul>
+    <a href="/farms/new">make a new farm</a>
+  </body>
+</html>
