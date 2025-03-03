@@ -108,6 +108,19 @@ app.get(
   })
 );
 
+const valideteErr = (err) => {
+  console.dir(err);
+  return new AppError(400, `invalid input ${err.message}`);
+};
+
+app.use((err, req, res, next) => {
+  console.log(err.name);
+  if (err.name === "ValidationError") {
+    err = valideteErr(err);
+  }
+  next(err);
+});
+
 app.use((err, req, res, next) => {
   const { status = 500, message = "something went wrong" } = err;
   res.status(status).send(message);
