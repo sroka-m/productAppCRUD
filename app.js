@@ -19,8 +19,16 @@ app.use(methodOverride("_method"));
 
 const categories = ["fruit", "vegetable", "dairy"];
 
-app.get("/products", async (req, res, next) => {
-  try {
+//i can go this because async return a promise
+function wrapAsync(fn) {
+  return function (req, res, next) {
+    fn(req, res, next).catch((e) => next(e));
+  };
+}
+
+app.get(
+  "/products",
+  wrapAsync(async (req, res, next) => {
     const { category } = req.query;
     // console.log(req.query);
     // console.log(req.query == true);
@@ -31,10 +39,8 @@ app.get("/products", async (req, res, next) => {
       let products = await Product.find({});
       res.render("index", { products, category: "All" });
     }
-  } catch (e) {
-    next(e);
-  }
-});
+  })
+);
 
 app.get("/products/new", (req, res) => {
   //new route must be before /products/:id otherwuse "new" will be treated as an id
@@ -51,8 +57,9 @@ app.post("/products", async (req, res, next) => {
   }
 });
 
-app.get("/products/update/:id", async (req, res, next) => {
-  try {
+app.get(
+  "/products/update/:id",
+  wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     let product = await Product.findById(id);
     if (!product) {
@@ -60,24 +67,22 @@ app.get("/products/update/:id", async (req, res, next) => {
     }
     // console.log(product);
     res.render("update", { product, categories });
-  } catch (e) {
-    next(e);
-  }
-});
-app.delete("/products/:id", async (req, res, next) => {
-  try {
+  })
+);
+app.delete(
+  "/products/:id",
+  wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     // console.log(req.body);
     let product = await Product.findByIdAndDelete(id);
     // console.log(product);
     // res.redirect(`/products/`); this was cauing problems
     res.redirect(`/products`);
-  } catch (e) {
-    next(e);
-  }
-});
-app.put("/products/:id", async (req, res, next) => {
-  try {
+  })
+);
+app.put(
+  "/products/:id",
+  wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     // console.log(req.body);
     let product = await Product.findByIdAndUpdate(id, req.body, {
@@ -86,13 +91,12 @@ app.put("/products/:id", async (req, res, next) => {
     });
     // console.log(product);
     res.redirect(`/products/${product._id}`);
-  } catch (e) {
-    next(e);
-  }
-});
+  })
+);
 
-app.get("/products/:id", async (req, res, next) => {
-  try {
+app.get(
+  "/products/:id",
+  wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     // console.log(id);
     let product = await Product.findById(id);
@@ -101,10 +105,8 @@ app.get("/products/:id", async (req, res, next) => {
     }
     // console.log(product);
     res.render("show", { product });
-  } catch (e) {
-    next(e);
-  }
-});
+  })
+);
 
 app.use((err, req, res, next) => {
   const { status = 500, message = "something went wrong" } = err;
