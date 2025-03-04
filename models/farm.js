@@ -12,10 +12,12 @@ const farmSchema = new mongoose.Schema({
     type: String,
     required: [true, "email required!"],
   },
-  products: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Product",
-  },
+  products: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+    },
+  ],
 });
 
 const Farm = mongoose.model("Farm", farmSchema);

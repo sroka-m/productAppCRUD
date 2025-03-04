@@ -10,10 +10,13 @@
     <h2><%=category%> products!</h2>
     <ul>
       <% for(let product of products){ %>
-      <a href="products/<%=product._id%>"> <li><%=product.name %></li></a>
+      <li>
+        <a href="products/<%=product._id%>"><%=product.name %></a> from
+        <%=product.farm.name%>
+      </li>
+
       <% } %>
     </ul>
-    <a href="/products/new">make a new product</a>
     <% if(category !== "All"){%>
     <a href="/products">All products</a>
     <%}%>

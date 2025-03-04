@@ -10,6 +10,13 @@
     <p>name: <%=farm.name %></p>
     <p>city: <%=farm.city %></p>
     <p>email: <%=farm.email %></p>
+    <p><a href="/products/new/farms/<%=farm._id%>">make a new product</a></p>
+    <p>list of products</p>
+    <ul>
+      <%for(let product of farm.products){%>
+      <li><a href="/products/<%=product._id%>"><%=product.name%></a></li>
+      <%}%>
+    </ul>
     <a href="/farms">Back to All frams</a>
   </body>
 </html>

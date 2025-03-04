@@ -9,6 +9,7 @@
     <h1>showing a product</h1>
     <p>name: <%=product.name %></p>
     <p>quantitiy: <%=product.qty %></p>
+    <p>from farm: <a href="/farms/<%=product.farm._id%>"> <%=product.farm.name %></p></a>
     <p>category: <a href="/products?category=<%=product.category%>"><%=product.category%></p> </a>
     <a href="/products">Go back to all products</a>
     <a href="/products/update/<%=product._id %>">update a product</a>

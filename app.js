@@ -45,7 +45,7 @@ app.post("/farms", async (req, res) => {
 app.get("/farms/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    let farm = await Farm.findById(id);
+    let farm = await Farm.findById(id).populate("products", "name _id");
     console.log(farm);
     res.render("farms/show", { farm });
   } catch (e) {
@@ -53,19 +53,21 @@ app.get("/farms/:id", async (req, res) => {
   }
 });
 
+//U
+
+//D
+
 ///////////Prodcut routes
 const categories = ["fruit", "vegetable", "dairy"];
 
 app.get("/products", async (req, res) => {
   try {
     const { category } = req.query;
-    console.log(req.query);
-    console.log(req.query == true);
     if (category) {
-      let products = await Product.find({ category });
+      let products = await Product.find({ category }).populate("farm", "name");
       res.render("index", { products, category });
     } else {
-      let products = await Product.find({});
+      let products = await Product.find({}).populate("farm", "name");
       res.render("products/index", { products, category: "All" });
     }
   } catch (e) {
@@ -73,15 +75,27 @@ app.get("/products", async (req, res) => {
   }
 });
 
-app.get("/products/new", (req, res) => {
+//the option to create product was intially on the product index page, i will delete it for now, in the future we could make another new form where the farm field would be drop dowm menu, list of all the farms. We ould
+//essentily loop through all farms crate li. It is much more computaional heavy solution that creating from the farm view and an overkill
+//but just curious how to implemtn it
+app.get("/products/new/farms/:id", async (req, res) => {
   //new route must be before /products/:id otherwuse "new" will be treated as an id
-  res.render("products/new", { categories });
+  let { id } = req.params;
+  console.log(req.params);
+  let { name, _id } = await Farm.findById(id);
+  console.log(name);
+  res.render("products/new", { categories, name, _id });
 });
-app.post("/products", async (req, res) => {
+app.post("/products/farms/:id", async (req, res) => {
   try {
     //technically we ought to be doing form santizing, making sure there are stuff thatis not meant to be
+    let { id } = req.params;
+    let farm = await Farm.findById(id);
     let newProduct = new Product(req.body);
+    newProduct.farm = farm;
     await newProduct.save();
+    farm.products.push(newProduct);
+    await farm.save();
     res.redirect(`/products/${newProduct._id}`);
   } catch (e) {
     console.log(e);
@@ -130,7 +144,7 @@ app.get("/products/:id", async (req, res) => {
     const { id } = req.params;
     console.log(id);
     console.log("hello");
-    let product = await Product.findById(id);
+    let product = await Product.findById(id).populate("farm", "name _id");
     console.log(product);
     res.render("products/show", { product });
   } catch (e) {
